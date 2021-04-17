@@ -145,4 +145,34 @@ function loadStyle(href, callback) {
       }
     }
   });
+  //***************************************** */
+  $("#employeAdd").click(function(){
+    renderAddEmploye();
+    $("#exampleModalRight").modal('show');
+  });
+  $("#departmentAdd").click(function(){
+    renderAddDepartment();
+    $("#exampleModalRight").modal('show');
+  });
+  $("#itemAdd").click(function(){
+    renderAddItem();
+    $("#exampleModalRight").modal('show');
+  });
+  function renderAddEmploye(){
+    $("#modalForm").empty();
+    $(".modal-title").text("Добавить сотрудника");
+    var name = '<div class="form-group"><label>Имя: </label><input type="text" class="form-control" placeholder="" name="shortname" id="shortname" /></div>';
+    var sorname = '<div class="form-group"><label>Фамилия: </label><input type="text" class="form-control" placeholder="" name="sorname" id="sorname" /></div>';
+    var thirdname = '<div class="form-group"><label>Отчество: </label><input type="text" class="form-control" placeholder="" name="thirdname" id="thirdname" /></div>';
+    var department ='<div class="form-group"><label>Отдел/Цех: </label><select class="form-control"><option label="&nbsp;">&nbsp;</option><option value="Flexbox">Flexbox</option><option value="Sass">Sass</option><option value="React">React</option></select></div>';
+    $("#modalForm").append(name+sorname+thirdname+department);
+  }
+  function renderAddDepartment(){
+    $("#modalForm").empty();
+    $(".modal-title").text("Добавить отдел");
+  }
+  function renderAddItem(){
+    $("#modalForm").empty();
+    $(".modal-title").text("Добавить единицу учета");
+  }
 })(jQuery);

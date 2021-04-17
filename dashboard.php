@@ -90,7 +90,7 @@ if (User::isAuthorized()): ?>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="Pages.Auth.Register.html">
+                                    <a id="employeAdd">
                                         <i class="simple-icon-user-follow"></i> <span
                                             class="d-inline-block">Добавить</span>
                                     </a>
@@ -116,7 +116,7 @@ if (User::isAuthorized()): ?>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="Pages.Profile.Social.html">
+                                    <a id="departmentAdd">
                                         <i class="simple-icon-plus"></i> <span class="d-inline-block">Добавить</span>
                                     </a>
                                 </li>
@@ -172,7 +172,7 @@ if (User::isAuthorized()): ?>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="Pages.Blog.Detail.html">
+                                    <a id="itemAdd">
                                         <i class="simple-icon-plus"></i> <span class="d-inline-block">Добавить</span>
                                     </a>
                                 </li>
@@ -444,7 +444,30 @@ if (User::isAuthorized()): ?>
                 </div>
         </div>
     </main>
+    <!-- start right modal form -->
+    <div class="modal fade modal-right" id="exampleModalRight" tabindex="-1" role="dialog" aria-labelledby="exampleModalRight" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add New</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="modalForm">
 
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-primary"
+                        data-dismiss="modal">Выход</button>
+                    <button type="button" class="btn btn-primary">Отправить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end right modal form -->
     <footer class="page-footer">
         <div class="footer-content">
             <div class="container-fluid">
