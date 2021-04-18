@@ -13,7 +13,8 @@ class UserController {
                     ,"department"=>$result["department"]
                     ,"position"=>$result["position"]
                     ,"role"=>$result["role"]
-                    ,"Org"=>$result["Org"]);
+                    ,"Org"=>$result["Org"]
+                    ,"OrgID"=>$result["OrgID"]);
     }
 }
 ?>

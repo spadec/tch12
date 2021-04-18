@@ -193,7 +193,6 @@ if (User::isAuthorized()): ?>
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
-
                     <h1>Панель управления</h1>
                     <nav class="breadcrumb-container d-none d-sm-block d-lg-inline-block" aria-label="breadcrumb">
                         <ol class="breadcrumb pt-0">
@@ -207,8 +206,6 @@ if (User::isAuthorized()): ?>
                         </ol>
                     </nav>
                     <div class="separator mb-5"></div>
-
-
                 </div>
                 <div class="col-lg-12 col-xl-6">
                     <div class="icon-cards-row">
@@ -507,6 +504,7 @@ if (User::isAuthorized()): ?>
     <script src="js/vendor/bootstrap-datepicker.js"></script>
     <script src="js/vendor/Sortable.js"></script>
     <script src="js/vendor/mousetrap.min.js"></script>
+    <script src="js/vendor/bootstrap-notify.min.js"></script>
     <script src="js/dore.script.js"></script>
     <script src="js/scripts.js"></script>
     <script src="js/ajax-form.js"></script>

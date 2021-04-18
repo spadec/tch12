@@ -147,6 +147,7 @@ function loadStyle(href, callback) {
   });
   //***************************************** */
   $("#employeAdd").click(function(){
+    //
     renderAddEmploye();
     $("#exampleModalRight").modal('show');
   });
@@ -158,14 +159,47 @@ function loadStyle(href, callback) {
     renderAddItem();
     $("#exampleModalRight").modal('show');
   });
+  function showNotify(type,title, message){
+    $.notify({
+      // options
+      icon: 'glyphicon glyphicon-warning-sign',
+      title: title,
+      message: message
+    },{
+      // settings
+      element: 'body',
+      position: null,
+      type: type,
+      placement: {
+        from: "bottom",
+        align: "right"
+      },
+    });
+  }
   function renderAddEmploye(){
     $("#modalForm").empty();
+    $.ajax({
+      method: "POST",
+      dataType: 'json',
+      url: "api/getDepartmentsList.php"
+    }).done(function( msg ) {
+      console.log(msg);
+      var name = '<div class="form-group"><label>Имя: </label><input type="text" class="form-control" placeholder="" name="shortname" id="shortname" /></div>';
+      var sorname = '<div class="form-group"><label>Фамилия: </label><input type="text" class="form-control" placeholder="" name="sorname" id="sorname" /></div>';
+      var thirdname = '<div class="form-group"><label>Отчество: </label><input type="text" class="form-control" placeholder="" name="thirdname" id="thirdname" /></div>';
+      var departmentStart ='<div class="form-group"><label>Отдел/Цех: </label><select class="form-control">';
+      var options = '<option value="0" label="&nbsp;">Укажите...</option>';
+      for (let i = 0; i < msg.length; i++) {
+        options += '<option value="'+msg[i].id+'" label="&nbsp;">'+msg[i].name+'</option>';
+      }
+      var departmentEnd = '</select></div>';
+      $("#modalForm").append(name+sorname+thirdname+departmentStart+options+departmentEnd);
+    }).fail(function(msg){
+      console.log(msg);
+      showNotify('danger','Ошибка!','Посмотри консоль разработчика!');
+    });
     $(".modal-title").text("Добавить сотрудника");
-    var name = '<div class="form-group"><label>Имя: </label><input type="text" class="form-control" placeholder="" name="shortname" id="shortname" /></div>';
-    var sorname = '<div class="form-group"><label>Фамилия: </label><input type="text" class="form-control" placeholder="" name="sorname" id="sorname" /></div>';
-    var thirdname = '<div class="form-group"><label>Отчество: </label><input type="text" class="form-control" placeholder="" name="thirdname" id="thirdname" /></div>';
-    var department ='<div class="form-group"><label>Отдел/Цех: </label><select class="form-control"><option label="&nbsp;">&nbsp;</option><option value="Flexbox">Flexbox</option><option value="Sass">Sass</option><option value="React">React</option></select></div>';
-    $("#modalForm").append(name+sorname+thirdname+department);
+
   }
   function renderAddDepartment(){
     $("#modalForm").empty();
