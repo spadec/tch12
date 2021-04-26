@@ -56,6 +56,7 @@
                 <div class="dropdown-menu dropdown-menu-right mt-3">
                 <form class="ajax" method="post" action="ajax.php">
                     <input type="hidden" name="act" value="logout">
+                    <input type="hidden" name="OrgID" id="OrgID" value="<?php echo $_SESSION["user"]["OrgID"]; ?>" />
                     <li class="dropdown-item"><strong>Организация:</strong> <?php echo $_SESSION["user"]["Org"]; ?></li>
                     <li class="dropdown-item"><strong>Отдел:</strong> <?php echo $_SESSION["user"]["department"]; ?></li>
                     <li class="dropdown-item"><strong>Должность:</strong> <?php echo $_SESSION["user"]["position"]; ?></li>

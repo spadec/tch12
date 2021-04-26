@@ -7,7 +7,8 @@
 
         $db = new SafeMySQL($config);
         $departments = new DepartmentModel($db);
-        $departmentsList = $departments->getDepartments(1);
+        $OrgID = $_POST["OrgID"];
+        $departmentsList = $departments->getDepartments($OrgID);
         echo json_encode($departmentsList, JSON_UNESCAPED_UNICODE);
 
 ?>

@@ -459,7 +459,7 @@ if (User::isAuthorized()): ?>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-primary"
                         data-dismiss="modal">Выход</button>
-                    <button type="button" class="btn btn-primary">Отправить</button>
+                    <button type="button" class="btn btn-primary" id="formSubmit">Отправить</button>
                 </div>
             </div>
         </div>

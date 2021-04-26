@@ -159,6 +159,12 @@ function loadStyle(href, callback) {
     renderAddItem();
     $("#exampleModalRight").modal('show');
   });
+  /**
+   * Показывает оповещение
+   * @param {*тип оповещения} type 
+   * @param {*заголовок} title 
+   * @param {*текст оповещения} message 
+   */
   function showNotify(type,title, message){
     $.notify({
       // options
@@ -176,37 +182,80 @@ function loadStyle(href, callback) {
       },
     });
   }
+  /**
+   * Рендер формы добавления сотрудника
+   */
   function renderAddEmploye(){
     $("#modalForm").empty();
     $.ajax({
       method: "POST",
       dataType: 'json',
-      url: "api/getDepartmentsList.php"
+      url: "api/getDepartmentsList.php",
+      data:{OrgID:$("#OrgID").val()}
     }).done(function( msg ) {
-      console.log(msg);
-      var name = '<div class="form-group"><label>Имя: </label><input type="text" class="form-control" placeholder="" name="shortname" id="shortname" /></div>';
-      var sorname = '<div class="form-group"><label>Фамилия: </label><input type="text" class="form-control" placeholder="" name="sorname" id="sorname" /></div>';
-      var thirdname = '<div class="form-group"><label>Отчество: </label><input type="text" class="form-control" placeholder="" name="thirdname" id="thirdname" /></div>';
-      var departmentStart ='<div class="form-group"><label>Отдел/Цех: </label><select class="form-control">';
-      var options = '<option value="0" label="&nbsp;">Укажите...</option>';
+      var name = '<div class="form-group"><label>Имя: </label><input required type="text" class="form-control" placeholder="" name="shortname" id="shortname" /></div>';
+      var sorname = '<div class="form-group"><label>Фамилия: </label><input required type="text" class="form-control" placeholder="" name="sorname" id="sorname" /></div>';
+      var thirdname = '<div class="form-group"><label>Отчество: </label><input required type="text" class="form-control" placeholder="" name="thirdname" id="thirdname" /></div>';
+      var position = '<div class="form-group"><label>Должность: </label><input required type="text" class="form-control" placeholder="" name="position" id="position" /></div>';
+      var departmentStart ='<div class="form-group"><label>Отдел/Цех: </label><select name="department" id="department" class="form-control">';
+      var options = '<option value="0" selected >Укажите...</option>';
+      var typeForm = '<input type="hidden" value="employe" id="employe" />';
       for (let i = 0; i < msg.length; i++) {
-        options += '<option value="'+msg[i].id+'" label="&nbsp;">'+msg[i].name+'</option>';
+        options += '<option value="'+msg[i].id+'" >'+msg[i].name+'</option>';
       }
       var departmentEnd = '</select></div>';
-      $("#modalForm").append(name+sorname+thirdname+departmentStart+options+departmentEnd);
+      $("#modalForm").append(sorname+name+thirdname+position+departmentStart+options+departmentEnd+typeForm);
     }).fail(function(msg){
       console.log(msg);
       showNotify('danger','Ошибка!','Посмотри консоль разработчика!');
     });
     $(".modal-title").text("Добавить сотрудника");
-
   }
+  /**
+   * Рендер формы добавления отдела
+   */
   function renderAddDepartment(){
     $("#modalForm").empty();
     $(".modal-title").text("Добавить отдел");
   }
+  /**
+   * Рендер формы добавления едениц учета
+   */
   function renderAddItem(){
     $("#modalForm").empty();
     $(".modal-title").text("Добавить единицу учета");
   }
+  function addEmploye(){
+    var shortName = $("#shortname").val(), sorname =$("#sorname").val(), thirdname = $("#thirdname").val(), position = $("#position").val(), dep = $("#department").val();
+    if(dep!=0){
+      $.ajax({
+        method: "POST",
+        dataType: 'json',
+        url: "api/setEmploye.php",
+        data:{shortName:shortName, sorname:sorname, thirdname:thirdname, position:position, department:dep}
+      }).done(function( msg ) {
+        console.log(msg);
+        showNotify('success','Успех!','Успешно добавлен новый сотрудник!');
+        $("#exampleModalRight").modal("hide");
+      }).fail(function(msg){
+        $("#exampleModalRight").modal("hide");
+        console.log(msg);
+        showNotify('danger','Ошибка!','Посмотри консоль разработчика!');
+      });
+    }
+    else {
+      $("#exampleModalRight").modal("hide");
+      showNotify('warning','Внимание!','Укажите отдел!');
+    }
+  }
+  $("#formSubmit").click(function(){
+    var type = $("#employe").val();
+    switch(type){
+      case 'employe':
+        addEmploye();
+        break;
+      default:
+        break;
+    }
+  });
 })(jQuery);
