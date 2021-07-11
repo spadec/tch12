@@ -13,17 +13,12 @@ require_once '../classes/Auth.class.php';
 if (User::isAuthorized()):
     include_once "../classes/config.php";
     include_once "../classes/safemysql.php";
-    include_once "../classes/models/employe.php";
+    include_once "../classes/models/departments.php";
     $db = new SafeMySQL($config);
-    $employe = new EmployeModel($db);
-    $result = $employe->setEmploye($_POST);
-    /*$name = $_POST['shortName'];
-    $sorname = $_POST['sorname'];
-    $thirdname = $_POST['thirdname'];
-    $position = $_POST['position'];
-    $dep = $_POST['department'];*/
-    echo json_encode($result, JSON_UNESCAPED_UNICODE);
+    $department = new DepartmentModel($db);
+    $name = $_POST["name"]; $OrgID = $_SESSION["user"]["OrgID"]; $parentID = $_POST['parentID'];
+    $result = $department->setDepartment($name, $parentID, $OrgID);
+    echo json_encode($result, JSON_UNESCAPED_UNICODE);  
 else:
     echo json_encode(array("error"=>"auth fail"), JSON_UNESCAPED_UNICODE);  
 endif;
-?>

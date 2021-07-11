@@ -193,13 +193,13 @@ function loadStyle(href, callback) {
       url: "api/getDepartmentsList.php",
       data:{OrgID:$("#OrgID").val()}
     }).done(function( msg ) {
-      var name = '<div class="form-group"><label>Имя: </label><input required type="text" class="form-control" placeholder="" name="shortname" id="shortname" /></div>';
-      var sorname = '<div class="form-group"><label>Фамилия: </label><input required type="text" class="form-control" placeholder="" name="sorname" id="sorname" /></div>';
-      var thirdname = '<div class="form-group"><label>Отчество: </label><input required type="text" class="form-control" placeholder="" name="thirdname" id="thirdname" /></div>';
-      var position = '<div class="form-group"><label>Должность: </label><input required type="text" class="form-control" placeholder="" name="position" id="position" /></div>';
-      var departmentStart ='<div class="form-group"><label>Отдел/Цех: </label><select name="department" id="department" class="form-control">';
-      var options = '<option value="0" selected >Укажите...</option>';
-      var typeForm = '<input type="hidden" value="employe" id="employe" />';
+      var name = '<div class="form-group"><label>Имя: </label><input required type="text" class="form-control" placeholder="" name="shortname" id="shortname" /></div>',
+      sorname = '<div class="form-group"><label>Фамилия: </label><input required type="text" class="form-control" placeholder="" name="sorname" id="sorname" /></div>',
+      thirdname = '<div class="form-group"><label>Отчество: </label><input required type="text" class="form-control" placeholder="" name="thirdname" id="thirdname" /></div>',
+      position = '<div class="form-group"><label>Должность: </label><input required type="text" class="form-control" placeholder="" name="position" id="position" /></div>',
+      departmentStart ='<div class="form-group"><label>Отдел/Цех: </label><select name="department" id="department" class="form-control">',
+      options = '<option value="0" selected >Укажите...</option>',
+      typeForm = '<input type="hidden" value="employe" id="action" />';
       for (let i = 0; i < msg.length; i++) {
         options += '<option value="'+msg[i].id+'" >'+msg[i].name+'</option>';
       }
@@ -216,7 +216,42 @@ function loadStyle(href, callback) {
    */
   function renderAddDepartment(){
     $("#modalForm").empty();
+    $.ajax({
+      method: "POST",
+      dataType: 'json',
+      url: "api/getDepartmentsList.php",
+      data:{OrgID:$("#OrgID").val()}
+    }).done(function( msg ) {
+      function writeSubDeb(arr,parent_id,sep){
+        let result = arr.filter(item => item.parent_id == parent_id);
+        if(result.length>0){
+          sep += "->|- ";
+          result.forEach(function(item){
+            $("#parentDepartment").append(new Option(sep+item.name, item.id));
+            writeSubDeb(msg,item.id,sep);
+            let del = msg.findIndex(fitem=>fitem.id == item.id);
+            msg.splice(del,1);
+          });
+        }
+      }
+      var dep ='<div class="form-group"><label>Название отдела: </label><input required type="text" class="form-control" placeholder="" name="depName" id="depName" /></div>',
+      departmentStart ='<div class="form-group"><label>Родительский Отдел/Цех: </label><select name="parentDepartment" id="parentDepartment" class="form-control">',
+      options = '<option value="0" selected >Укажите...</option>',
+      typeForm = '<input type="hidden" value="department" id="action" />';
+      var departmentEnd = '</select></div>';
+      $("#modalForm").append(departmentStart+options+departmentEnd+dep+typeForm);
+      msg.forEach(function(item){
+        var sep = "";
+        $("#parentDepartment").append(new Option(item.name, item.id));
+        writeSubDeb(msg,item.id,sep);
+      })
+
+    }).fail(function(msg){
+      console.log(msg);
+      showNotify('danger','Ошибка!','Посмотри консоль разработчика!');
+    });
     $(".modal-title").text("Добавить отдел");
+
   }
   /**
    * Рендер формы добавления едениц учета
@@ -225,6 +260,9 @@ function loadStyle(href, callback) {
     $("#modalForm").empty();
     $(".modal-title").text("Добавить единицу учета");
   }
+  /**
+   * Запрос на сервер для добавления сотрудников
+   */
   function addEmploye(){
     var shortName = $("#shortname").val(), sorname =$("#sorname").val(), thirdname = $("#thirdname").val(), position = $("#position").val(), dep = $("#department").val();
     if(dep!=0){
@@ -248,14 +286,45 @@ function loadStyle(href, callback) {
       showNotify('warning','Внимание!','Укажите отдел!');
     }
   }
+  /**
+   * Запрос на сервер для добавления отдела
+   */
+  function AddDepartment(){
+    var depName = $("#depName").val(),parentID = $("#parentDepartment").val();
+    if(depName!=0){
+      $.ajax({
+        method: "POST",
+        dataType: 'json',
+        url: "api/setDepartment.php",
+        data:{name:depName, parentID:parentID}
+      }).done(function( msg ) {
+        console.log(msg);
+        showNotify('success','Успех!','Успешно добавлен новый отдел!');
+        $("#exampleModalRight").modal("hide");
+      }).fail(function(msg){
+        $("#exampleModalRight").modal("hide");
+        console.log(msg);
+        showNotify('danger','Ошибка!','Посмотри консоль разработчика!');
+      });
+    }
+    else {
+      showNotify('danger','Ошибка', 'Введите наименование отдела');
+    }
+  }
   $("#formSubmit").click(function(){
-    var type = $("#employe").val();
+    var type = $("#action").val();
     switch(type){
       case 'employe':
         addEmploye();
         break;
+      case 'department':
+        AddDepartment();
+        break;
       default:
         break;
     }
+  });
+  $("#departmentsFilter").change(function() {
+    $("#departmentFilter").submit();
   });
 })(jQuery);

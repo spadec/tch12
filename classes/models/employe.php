@@ -17,4 +17,19 @@ class EmployeModel{
         }
         return false;
     }
+    public function getEmployeByOrgID($orgID, $departmentID, $limit = 200){
+        $qpart = "";
+        if($departmentID){
+            $qpart = $this->db->parse(" AND d.id=?i", $departmentID);
+        }
+        $sql = "SELECT s.*,d.name as dname FROM `employees` s Inner join `departments` d on s.department_id = d.id WHERE d.organization_id = ?i ?p LIMIT ?i";
+        $result = $this->db->getAll($sql,$orgID, $qpart, $limit);
+        if($result){
+            return $result;
+        }
+        return false;
+    }
+    public function getEmployeBySearch($orgID, $searchStr, $departmentID, $limit = 200){
+        return false;
+    }
 }

@@ -3015,7 +3015,7 @@ $.dore = function (element, options) {
             .addClass("next");
           $(".dataTables_wrapper .pagination").addClass("pagination-sm");
           var api = $(this).dataTable().api();
-          $("#pageCountDatatable span").html("Displaying " + parseInt(api.page.info().start + 1) + "-" + api.page.info().end + " of " + api.page.info().recordsTotal + " items");
+          $("#pageCountDatatable span").html("Показ " + parseInt(api.page.info().start + 1) + "-" + api.page.info().end + " из " + api.page.info().recordsTotal + " позиций");
         }
       });
 
